@@ -9,7 +9,6 @@ The System was built using a domain driven design, dividing the system logic int
 _The Merchant management/Auth service manages merchants and system users, in addition the microservice authenticates and authorizes users into the system. The System uses JWT to store the identity and roles of authenticated user, the system stores the token in redis which is an in-memory storage for fast retrieval and validation. The system has a cron job that flushes or purges out expired token from redis._
 
 _The system has 3 different microservices for voucher generation of the different type of vouchers namely Gift, value and discount voucher. The team decided to separate the generation, management and redemption of the different type of voucher because of the distinct properties between the voucher types, separating them also enhances the scalability of individual voucher microservice at peak period.
-
 The system generates both standalone and bulk voucher codes of varying types for merchants. The system uses SQL table value parameter to store bulk codes, it generates and stores more than 1 million codes in less than 2 minutes.
 Vouchers can be enabled, disabled and validated. A user can provide customized code and as well use the realtime client voucher generation service to dynamically generate vouchers based on specified configuration._
 
