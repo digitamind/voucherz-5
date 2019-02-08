@@ -1,0 +1,14 @@
+package com.interswitch.voucherz.audittrailservice.util;
+
+public enum EventType {
+    MERCHANT_CREATED,
+    MERCHANT_LOGIN,
+    MERCHANT_LOGOUT,
+    VOUCHER_CREATED,
+    VOUCHER_REDEEMED,
+    CUSTOMER_CREATED,
+    PRODUCT_CREATED,
+    CAMPAIGN_CREATED,
+    APPLICATION_CREATED,
+    CUSTOMER_SEGMENT_CREATED
+}
