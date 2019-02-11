@@ -22,4 +22,4 @@ admin._
 - Spring: Java webframework for API development.
 - React: Frontend framework to design Merchant Admin Portal and System Admin Portal
 - Flyway: For Database Migration 
-- MonoDB: NoSQL database use for audit trail storage.
+- MongoDB: NoSQL database use for audit trail storage.
