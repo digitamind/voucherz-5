@@ -124,7 +124,7 @@
 			<artifactId>voucherz-library</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 			<scope>system</scope>
-			<systemPath>C:/voucherz/voucherz-library/target/voucherz-library-0.0.1-SNAPSHOT.jar</systemPath>
+			<systemPath>C:/voucherz-5/voucherz-library/target/voucherz-library-0.0.1-SNAPSHOT.jar</systemPath>
 		</dependency>
 
 	</dependencies>

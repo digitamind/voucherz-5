@@ -24,11 +24,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.io.IOException;
 
 @RunWith(SpringRunner.class)
-@ActiveProfiles("test")
+//@ActiveProfiles("test")
 @EnableConfigurationProperties
 @SpringBootTest
 @AutoConfigureMockMvc(secure = false)
-@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
+//@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(locations = "classpath:application-test.properties")
 public class DiscountVoucherControllerTest {
     @Autowired

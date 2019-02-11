@@ -20,9 +20,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@ActiveProfiles("test")
+//@ActiveProfiles("test")
 @EnableConfigurationProperties
-@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
+//@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(locations = "classpath:application-test.properties")
 @ContextConfiguration
 public class DiscountVoucherServiceTest {
