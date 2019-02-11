@@ -33,11 +33,10 @@ public class VoucherServiceImpl<T> implements VoucherService<T> {
     public VoucherResponse createBulk(BulkVouchers bulkVouchers){
         SQLServerDataTable vouchersTvp = null;
         CodeConfig codeConfig = bulkVouchers.getCodeConfig();
-        Integer numOfVouchers = bulkVouchers.getQuantity();
         Voucher model = bulkVouchers.getVoucher();
         try {
             vouchersTvp = getTvpWithMetadata();
-            addTableRows(model, vouchersTvp, codeConfig, numOfVouchers);
+            addTableRows(model, vouchersTvp, codeConfig);
         } catch (SQLServerException e) {
             throw new RequestException(e.getClass().getName()+" : "+e.getMessage());
         }
@@ -65,8 +64,8 @@ public class VoucherServiceImpl<T> implements VoucherService<T> {
         return vouchers;
     }
 
-    private void addTableRows(Voucher model, SQLServerDataTable vouchers, CodeConfig config, Integer numOfVouchers) throws SQLServerException {
-        for(int i = 0; i< numOfVouchers ; i++){
+    private void addTableRows(Voucher model, SQLServerDataTable vouchers, CodeConfig config) throws SQLServerException {
+        for(int i = 0; i< config.getQuantity() ; i++){
 
             vouchers.addRow(VoucherCodeGenerator.generate(config),
                     model.getAmount(),

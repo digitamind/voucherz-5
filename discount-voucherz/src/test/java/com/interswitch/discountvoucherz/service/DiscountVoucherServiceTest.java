@@ -1,9 +1,11 @@
 package com.interswitch.discountvoucherz.service;
 
 import com.interswitch.discountvoucherz.api.model.request.BulkVouchers;
+import com.interswitch.discountvoucherz.api.model.request.DiscountType;
 import com.interswitch.discountvoucherz.api.model.request.DiscountVoucher;
 import com.interswitch.discountvoucherz.api.service.DiscountVoucherService;
 import com.interswitch.voucherz.library.model.CodeConfig;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -27,23 +29,23 @@ public class DiscountVoucherServiceTest {
     @Autowired
     DiscountVoucherService<DiscountVoucher> service;
 
-    public void createBulk(BulkVouchers model) {
-
-    }
-
-
     @Test
     public void createSingleVoucher() {
         BulkVouchers voucher = new BulkVouchers();
         DiscountVoucher model = new DiscountVoucher();
-        model.setCode("1234");
+        model.setCode("WE34");
+        model.setType(DiscountType.UNIT);
+        model.setValue(200);
         model.setMerchantId("0");
         model.setUserId("swissvic95@gmail.com");
+        model.setCampaignId("0");
+        model.setProductId("0");
+        model.setCustomerId("0");
+        model.setIsActive(true);
         voucher.setDiscountVoucher(model);
-        CodeConfig config = CodeConfig.builder().length(9).build();
+        CodeConfig config = CodeConfig.builder().quantity(1).length(9).build();
         voucher.setCodeConfig(config);
-        voucher.setQuantity(4);
-        Mockito.when(service.createBulk(voucher)).thenReturn(null);
+        Assert.assertNotNull(service.createBulk(voucher));
     }
 
     @Test

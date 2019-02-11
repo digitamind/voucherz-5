@@ -21,7 +21,7 @@ public class VoucherCodeGeneratorTest {
     @Test
     public void generateCodeOfGivenLength() {
         // given
-        CodeConfig config = CodeConfig.builder().charsetType(CharsetType.ALPHABETIC).length(10).build();
+        CodeConfig config = CodeConfig.builder().quantity(1).charsetType(CharsetType.ALPHABETIC).length(10).build();
 
         // when
         String code = voucherCodeGenerator.generate(config);
@@ -33,7 +33,7 @@ public class VoucherCodeGeneratorTest {
     @Test
     public void generateNumericCode() {
         // given
-        CodeConfig config = CodeConfig.builder().length(4).charsetType(CharsetType.NUMBERS).build();
+        CodeConfig config = CodeConfig.builder().quantity(1).length(4).charsetType(CharsetType.NUMBERS).build();
 
         // when
         String code = voucherCodeGenerator.generate(config);
@@ -46,7 +46,7 @@ public class VoucherCodeGeneratorTest {
     @Test
     public void generateCodeWithPrefix() {
         // given
-        CodeConfig config = CodeConfig.builder().length(8).prefix("TEST-").build();
+        CodeConfig config = CodeConfig.builder().quantity(1).length(8).prefix("TEST-").build();
 
         // when
         String code = voucherCodeGenerator.generate(config);
@@ -59,7 +59,7 @@ public class VoucherCodeGeneratorTest {
     @Test
     public void generateCodeWithPostfix() {
         // given
-        CodeConfig config = CodeConfig.builder().length(8).postfix("-TEST").build();
+        CodeConfig config = CodeConfig.builder().quantity(1).length(8).postfix("-TEST").build();
 
         // when
         String code = voucherCodeGenerator.generate(config);
@@ -72,7 +72,7 @@ public class VoucherCodeGeneratorTest {
     @Test
     public void generateCodeWithPrefixAndPostfix() {
         // given
-        CodeConfig config = CodeConfig.builder().length(8).prefix("TE-").postfix("-ST").build();
+        CodeConfig config = CodeConfig.builder().quantity(1).length(8).prefix("TE-").postfix("-ST").build();
 
         // when
         String code = voucherCodeGenerator.generate(config);
@@ -86,7 +86,7 @@ public class VoucherCodeGeneratorTest {
     @Test
     public void generateCodeFromGivenPattern() {
         // given
-        CodeConfig config = CodeConfig.builder().pattern("##-###-##").build();
+        CodeConfig config = CodeConfig.builder().quantity(1).pattern("##-###-##").build();
 
         // when
         String code = voucherCodeGenerator.generate(config);

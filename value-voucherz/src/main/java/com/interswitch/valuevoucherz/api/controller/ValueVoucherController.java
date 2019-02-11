@@ -21,7 +21,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping("/api/v1/value-voucher")
+@RequestMapping("/value-voucher")
 @Slf4j
 public class
 ValueVoucherController {

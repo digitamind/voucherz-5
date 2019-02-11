@@ -1,5 +1,6 @@
 package com.interswitch.voucherz.library.utils;
 
+import com.interswitch.voucherz.library.exception.RequestNotValidException;
 import com.interswitch.voucherz.library.model.CodeConfig;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,9 @@ public final class VoucherCodeGenerator {
             charset = Charset.getCharSet(charsetType).toCharArray();
         char[] pattern = config.getPattern().toCharArray();
 
+        if(! isFeasible(charset, pattern, config.getQuantity())){
+            throw new RequestNotValidException("Quantity Required is not feasible with the given charset. Try Again.");
+        }
         String prefix = config.getPrefix();
         String postfix = config.getPostfix();
 
@@ -40,5 +44,9 @@ public final class VoucherCodeGenerator {
         }
 
         return sb.toString();
+    }
+
+    private static boolean isFeasible(char[] charset, char[] pattern, int count){
+       return Math.pow(charset.length, pattern.length) >= count;
     }
 }

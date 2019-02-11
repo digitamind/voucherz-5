@@ -47,7 +47,7 @@ public class GiftVoucherServiceImpl<T> implements GiftVoucherService<T> {
         GiftVoucher model = bulkVouchers.getGiftVoucher();
         try {
             vouchersTvp = getTvpWithMetadata();
-            addTableRows(model, vouchersTvp, codeConfig, numOfVouchers);
+            addTableRows(model, vouchersTvp, codeConfig);
         } catch (SQLServerException e) {
             throw new RequestException(HttpStatus.INTERNAL_SERVER_ERROR, e.getClass().getName()+" : "+e.getMessage());
         }
@@ -77,8 +77,8 @@ public class GiftVoucherServiceImpl<T> implements GiftVoucherService<T> {
         return vouchers;
     }
 
-    private void addTableRows(GiftVoucher model, SQLServerDataTable vouchers, CodeConfig config, Integer numOfVouchers) throws SQLServerException {
-        for(int i = 0; i< numOfVouchers ; i++){
+    private void addTableRows(GiftVoucher model, SQLServerDataTable vouchers, CodeConfig config) throws SQLServerException {
+        for(int i = 0; i< config.getQuantity() ; i++){
 
             vouchers.addRow(VoucherCodeGenerator.generate(config),
                     model.getAmount(),

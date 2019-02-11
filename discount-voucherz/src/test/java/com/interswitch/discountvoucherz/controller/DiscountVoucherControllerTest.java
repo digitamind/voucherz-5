@@ -34,14 +34,14 @@ public class DiscountVoucherControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @TestConfiguration
-    static class GiftVoucherControllerTestContextConfiguration {
-
-        @Bean
-        public DiscountVoucherDao<DiscountVoucher> discountVoucherDao() {
-            return new DiscountVoucherDaoImpl<>();
-        }
-    }
+//    @TestConfiguration
+//    static class GiftVoucherControllerTestContextConfiguration {
+//
+//        @Bean
+//        public DiscountVoucherDao<DiscountVoucher> discountVoucherDao() {
+//            return new DiscountVoucherDaoImpl<>();
+//        }
+//    }
 
     @Autowired
     private DiscountVoucherDao<DiscountVoucher> discountVoucherDao;
