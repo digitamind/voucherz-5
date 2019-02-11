@@ -2,7 +2,6 @@ package com.interswitch.valuevoucherz.api.dao.impl;
 
 import com.interswitch.valuevoucherz.api.dao.AbstractBaseDao;
 import com.interswitch.valuevoucherz.api.dao.VoucherDao;
-import com.interswitch.valuevoucherz.api.exception.RequestException;
 import com.interswitch.valuevoucherz.api.model.request.Voucher;
 import com.interswitch.valuevoucherz.api.model.response.VoucherResponse;
 import com.microsoft.sqlserver.jdbc.SQLServerDataTable;
@@ -98,119 +97,99 @@ public class VoucherDaoImpl<T> extends AbstractBaseDao<T> implements VoucherDao<
 
     public T createStandaloneVoucher(T model) throws DataAccessException {
         SqlParameterSource params = new BeanPropertySqlParameterSource(model);
-        return getSingleResult(params, createSingle);
+        return withSingleResultSet(params, createSingle);
     }
 
     @Override
     public T getVoucherByCode(T model) {
         SqlParameterSource in = new BeanPropertySqlParameterSource(model);
-        return getSingleResult(in, getVoucherByCode);
+        return withSingleResultSet(in, getVoucherByCode);
     }
 
     @Override
     public List<T> getVoucherByMerchantUser(T model) {
         SqlParameterSource in = new BeanPropertySqlParameterSource(model);
-        return getMultipleResult(in, getVoucherByMerchantUser);
+        return withMultipleResultSet(in, getVoucherByMerchantUser);
     }
 
     @Override
     public List<T> getVoucherByCustomer(T model) {
         SqlParameterSource in = new BeanPropertySqlParameterSource(model);
-        return getMultipleResult(in, getVoucherByCustomer);
+        return withMultipleResultSet(in, getVoucherByCustomer);
     }
 
     @Override
     public List<T> getVoucherByCampaign(T model) {
         SqlParameterSource in = new BeanPropertySqlParameterSource(model);
-        return getMultipleResult(in, getVoucherByCampaign);
+        return withMultipleResultSet(in, getVoucherByCampaign);
     }
 
 
     @Override
     public List<T> getVoucherByDateCreated(T model) {
         SqlParameterSource in = new BeanPropertySqlParameterSource(model);
-        return getMultipleResult(in, getVoucherByDateCreated);
+        return withMultipleResultSet(in, getVoucherByDateCreated);
     }
 
     @Override
     public List<T> getVoucherByActiveStatus(T model) {
         SqlParameterSource in = new BeanPropertySqlParameterSource(model);
-        return getMultipleResult(in, getVoucherByActiveStatus);
+        return withMultipleResultSet(in, getVoucherByActiveStatus);
     }
 
     @Override
     public List<T> getVoucherByExpiryDate(T model) {
         SqlParameterSource in = new BeanPropertySqlParameterSource(model);
-        return getMultipleResult(in, getVoucherByExpiryDate);
+        return withMultipleResultSet(in, getVoucherByExpiryDate);
     }
 
     @Override
     public T validateVoucher(T model) {
         SqlParameterSource in = new BeanPropertySqlParameterSource(model);
-        return getSingleResult(in, validateVoucher);
+        return withSingleResultSet(in, validateVoucher);
 
     }
 
     @Override
     public List<T> getVoucherByProduct(T model) {
         SqlParameterSource in = new BeanPropertySqlParameterSource(model);
-        return getMultipleResult(in, getVoucherByProduct);
+        return withMultipleResultSet(in, getVoucherByProduct);
     }
 
     @Override
     public T redeem(T model) {
         SqlParameterSource in = new BeanPropertySqlParameterSource(model);
-        return getSingleResult(in, redeem);
+        return withSingleResultSet(in, redeem);
     }
 
     @Override
     public T addBalance(T model) {
         SqlParameterSource in = new BeanPropertySqlParameterSource(model);
-        return getSingleResult(in, addBalance);
+        return withSingleResultSet(in, addBalance);
     }
 
     @Override
     public T enable(T model) {
         SqlParameterSource in = new BeanPropertySqlParameterSource(model);
-        return getSingleResult(in, enable);
+        return withSingleResultSet(in, enable);
     }
 
     @Override
     public T disable(T model) {
         SqlParameterSource in = new BeanPropertySqlParameterSource(model);
-        return getSingleResult(in, disable);
+        return withSingleResultSet(in, disable);
     }
 
     @Override
     public T unDelete(T model) {
         SqlParameterSource in = new BeanPropertySqlParameterSource(model);
-        return getSingleResult(in, unDelete);
+        return withSingleResultSet(in, unDelete);
     }
 
     @Override
     public boolean delete(T model){
         SqlParameterSource in = new BeanPropertySqlParameterSource(model);
-        return getBooleanResult(in, delete);
-    }
-
-
-
-    public List<T> getMultipleResult(SqlParameterSource source, SimpleJdbcCall jdbcCall) {
-        Map<String, Object> m = jdbcCall.execute(source);
-        List<T> list = (List<T>) m.get(MULTIPLE_RESULT);
-        if (list == null || list.isEmpty()) {
-            throw new RequestException("No Record Found");
-        }
-        return (List<T>)m.get(MULTIPLE_RESULT);
-
-    }
-
-    private Boolean getBooleanResult(SqlParameterSource in, SimpleJdbcCall jdbcCall) {
-        Map<String, Object> m = jdbcCall.execute(in);
-        Integer return_value = (Integer) m.get("RETURN_VALUE");
-        if (return_value == 0)
-            return true;
-        return false;
+        return withReturnValue(in, delete);
     }
 
 }

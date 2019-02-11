@@ -161,7 +161,7 @@ public class VoucherServiceImpl<T> implements VoucherService<T> {
 
     @Override
     public Page<T> findAll(int pageNumber, int pageSize) {
-        return dao.findAll(pageNumber,pageSize);
+        return dao.getAll(pageNumber,pageSize);
     }
 
     @Override

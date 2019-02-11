@@ -14,13 +14,12 @@ import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import javax.sql.DataSource;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @Slf4j
 public abstract class AbstractBaseDao<T> implements BaseDao<T> {
 
     protected JdbcTemplate jdbcTemplate;
-    protected SimpleJdbcCall createSingle, update, delete, find, findAll;
+    protected SimpleJdbcCall createSingle, update, delete, get, getAll;
 
     protected final String SINGLE_RESULT = "object";
     protected final String MULTIPLE_RESULT = "list";
@@ -35,19 +34,13 @@ public abstract class AbstractBaseDao<T> implements BaseDao<T> {
 
     public T get(String code) {
         SqlParameterSource in = new MapSqlParameterSource().addValue("setCode", code);
-        return withSingleResultSet(in, find);
+        return withSingleResultSet(in, get);
     }
 
     public Page<T> getAll(int pageNumber, int pageSize) {
         SqlParameterSource in = new MapSqlParameterSource().addValue("pageNumber", pageNumber).addValue("pageSize", pageSize);
-        Map<String, Object> m = findAll.execute(in);
-        List<T> content = (List<T>) m.get(MULTIPLE_RESULT);
-        List<Long> countList = (List<Long>) m.get(RESULT_COUNT);
-
-        long count = 0;
-        if (Objects.nonNull(countList) && !countList.isEmpty()) {
-            count = countList.get(0);
-        }
+        List<T> content = withMultipleResultSet(in, getAll);
+        long count = content.size();
         Page<T> page = new Page<>(count, content);
         return page;
     }

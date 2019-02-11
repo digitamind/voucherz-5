@@ -13,21 +13,17 @@ import java.sql.Timestamp;
 @Getter
 @ToString
 public class DiscountVoucher extends BaseEntity {
-	@NotBlank(message = "Required")
-	@Length(min = 2, max = 16)
+
 	private String code;
 
-	@NotBlank(message = "Required")
 	private Integer value;
 
-	@NotBlank(message = "Required")
 	private DiscountType type;
 
 	private Timestamp dateCreated;
 
 	private Timestamp expiryDate;
 
-	@NotBlank(message = "Required")
 	private Boolean isActive;
 
 	private String category;

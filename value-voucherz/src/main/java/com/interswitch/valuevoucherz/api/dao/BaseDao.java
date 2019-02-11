@@ -8,9 +8,9 @@ public interface BaseDao<T> {
 
     public T update(T model);
 
-    public T find(String code);
+    public T get(String code);
 
-    public Page<T> findAll(int pageNumber, int pageSize);
+    public Page<T> getAll(int pageNumber, int pageSize);
 
     public boolean delete(T voucher);
 }
