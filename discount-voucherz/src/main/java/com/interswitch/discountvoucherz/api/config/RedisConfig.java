@@ -37,9 +37,9 @@ public class RedisConfig {
 
 
     @Bean
-    DiscountVoucherDistPublisher giftVoucherDistPublisher() {
+    DiscountVoucherDistPublisher voucherMailPublisher() {
         return new DiscountVoucherDistPublisherImpl(redisTemplate(),
-                new ChannelTopic("pubsub:distribute-gift-voucher"));
+                distributeVoucherTopic());
     }
 
     @Bean
@@ -62,6 +62,11 @@ public class RedisConfig {
 
     @Bean
     ChannelTopic deleteVoucherTopic() {
-        return new ChannelTopic("pubsub:gift-voucher-delete");
+        return new ChannelTopic("pubsub:discount-voucher-delete");
+    }
+
+    @Bean
+    ChannelTopic distributeVoucherTopic() {
+        return new ChannelTopic("pubsub:distribute-discount-voucher");
     }
 }

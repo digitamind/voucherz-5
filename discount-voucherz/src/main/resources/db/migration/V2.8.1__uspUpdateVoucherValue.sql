@@ -9,15 +9,13 @@ ALTER PROCEDURE [dbo].[uspUpdateVoucherValue]
 AS
 BEGIN
   BEGIN TRY
-    BEGIN TRANSACTION
       UPDATE [dbo].[DiscountVoucher]
       SET [value] = @value
       WHERE userId = @userId
       AND merchantId = @merchantId
       AND code = @code
-      AND isDeleted = 0
-      AND (expiryDate >= getdate() OR expiryDate IS NULL)
-    COMMIT
+      AND isActive = 1
+
       IF @@ROWCOUNT = 1
         RETURN;
       ELSE

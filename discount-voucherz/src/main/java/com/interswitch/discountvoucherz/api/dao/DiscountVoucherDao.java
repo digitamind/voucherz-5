@@ -28,7 +28,7 @@ public interface DiscountVoucherDao<T> extends BaseDao<T>{
 
     T redeem(T model);
 
-    T addBalance(T model);
+    Boolean updateVoucherValue(T model);
 
     boolean enable(T model);
 

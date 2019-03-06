@@ -62,6 +62,7 @@ public class LoginServiceImpl implements LoginService {
             String u_role = user.getRole();
             List<String> roles = Arrays.asList(u_role);
             String token = jwtTokenProvider.createToken(username, roles, merchantId);
+            logger.info("Our token is: "+token);
             return token;
 
         } catch (AuthenticationException e) {

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @SpringBootTest
@@ -27,7 +28,7 @@ public class DiscountVoucherDaoTest{
         DiscountVoucher model = new DiscountVoucher();
         model.setCode("WE34");
         model.setType(DiscountType.UNIT);
-        model.setValue(200);
+        model.setValue(200.0);
         model.setMerchantId("0");
         model.setUserId("swissvic95@gmail.com");
         model.setCampaignId("0");
@@ -112,6 +113,6 @@ public class DiscountVoucherDaoTest{
         model.setMerchantId("0");
         model.setUserId("swissvic95@gmail.com");
         //model.setCode("132fER");
-       // dao.update(model);
+       // dao.updateValue(model);
     }
 }

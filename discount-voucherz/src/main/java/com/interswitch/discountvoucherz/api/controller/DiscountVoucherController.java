@@ -18,7 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,7 +55,7 @@ DiscountVoucherController {
         Auth.setCredentials(request, requestModel);
         bulkVouchers.setDiscountVoucher(requestModel);
         baseResponse = service.createBulk(bulkVouchers);
-        LogHelper.logResponse(log, baseResponse.getResponsePhrase(), baseResponse.toString());
+        LogHelper.logResponse(log, baseResponse.getHttpStatus(), baseResponse.toString());
         return new ResponseEntity<>(baseResponse, HttpStatus.CREATED);
     }
 
@@ -67,7 +67,7 @@ DiscountVoucherController {
         auditTrailService.publishAudit(discountVoucher.getUserId(), EventType.VOUCHER_CREATED,
                 "Single discountVoucher generated");
         baseResponse = service.createSingleVoucher(discountVoucher);
-        LogHelper.logResponse(log, baseResponse.getResponsePhrase(), baseResponse.toString());
+        LogHelper.logResponse(log, baseResponse.getHttpStatus(), baseResponse.toString());
         return new ResponseEntity<>(baseResponse, HttpStatus.CREATED);
     }
 
@@ -79,7 +79,7 @@ DiscountVoucherController {
         requestModel.setCode(code);
         responseModel = service.getVoucherByCode(requestModel);
         LogHelper.logResponse(log, HttpStatus.OK, responseModel.toString());
-        return assembler.toResource(requestModel);
+        return assembler.toResource(responseModel);
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
@@ -97,7 +97,7 @@ DiscountVoucherController {
     }
 
     @RequestMapping(value = "/{code}/update", method = RequestMethod.PUT)
-    public ResponseEntity<Response> updateVoucher(@PathVariable("code") String code, @RequestBody UpdateVoucher voucherUpdate, HttpServletRequest request){
+    public ResponseEntity<Response> updateVoucher(@PathVariable("code") String code, @RequestBody UpdateVoucherDetails voucherUpdate, HttpServletRequest request){
         LogHelper.logRequest(request, log);
         requestModel = new DiscountVoucher();
         Auth.setCredentials(request, requestModel);
@@ -105,9 +105,21 @@ DiscountVoucherController {
         requestModel.setCode(code);
         requestModel.setAdditionalInfo(voucherUpdate.getAdditionalInfo());
         requestModel.setExpiryDate(voucherUpdate.getExpiryDate());
-        baseResponse = service.update(requestModel);
-        LogHelper.logResponse(log, baseResponse.getResponsePhrase(), baseResponse.toString());
-        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+        baseResponse = service.updateValue(requestModel);
+        LogHelper.logResponse(log, baseResponse.getHttpStatus(), baseResponse.toString());
+        return new ResponseEntity<>(baseResponse, baseResponse.getHttpStatus());
+    }
+
+    @RequestMapping(value = "/{code}/update-value", method = RequestMethod.PUT)
+    public ResponseEntity<Response> updateVoucherValue(@PathVariable("code") String code, @RequestBody UpdateVoucherValue voucherValue, HttpServletRequest request){
+        LogHelper.logRequest(request, log);
+        requestModel = new DiscountVoucher();
+        Auth.setCredentials(request, requestModel);
+        requestModel.setCode(code);
+        requestModel.setValue(voucherValue.getValue());
+        baseResponse = service.updateValue(requestModel);
+        LogHelper.logResponse(log, baseResponse.getHttpStatus(), baseResponse.toString());
+        return new ResponseEntity<>(baseResponse, baseResponse.getHttpStatus());
     }
 
     @RequestMapping(value = "/{code}/enable", method = RequestMethod.PUT)
@@ -117,7 +129,7 @@ DiscountVoucherController {
         Auth.setCredentials(request, requestModel);
         requestModel.setCode(code);
         baseResponse = service.enable(requestModel);
-        LogHelper.logResponse(log, baseResponse.getResponsePhrase(), baseResponse.toString());
+        LogHelper.logResponse(log, baseResponse.getHttpStatus(), baseResponse.toString());
         return new ResponseEntity<>(baseResponse, HttpStatus.OK);
     }
 
@@ -128,7 +140,7 @@ DiscountVoucherController {
         Auth.setCredentials(request, requestModel);
         requestModel.setCode(code);
         baseResponse = service.disable(requestModel);
-        LogHelper.logResponse(log, baseResponse.getResponsePhrase(), baseResponse.toString());
+        LogHelper.logResponse(log, baseResponse.getHttpStatus(), baseResponse.toString());
         return new ResponseEntity<>(baseResponse, HttpStatus.OK);
     }
 
@@ -154,16 +166,6 @@ DiscountVoucherController {
         return assembler.toResource(responseModel);
     }
 
-    @RequestMapping(value = "/{code}/add-balance", method = RequestMethod.POST)
-    public Resource<DiscountVoucher> addBalance(@PathVariable("code") String code, @RequestBody AddBalance addBalance, HttpServletRequest request){
-        LogHelper.logRequest(request, log);
-        requestModel = new DiscountVoucher();
-        Auth.setCredentials(request, requestModel);
-        requestModel.setCode(code);
-        responseModel = service.addBalance(requestModel);
-        LogHelper.logResponse(log, HttpStatus.OK, responseModel.toString());
-        return assembler.toResource(responseModel);
-    }
     @RequestMapping(value = "/{code}/delete", method = RequestMethod.DELETE)
     public ResponseEntity<Response> delete(@PathVariable("code") String code, HttpServletRequest request){
         LogHelper.logRequest(request, log);
@@ -204,11 +206,11 @@ DiscountVoucherController {
     }
 
     @RequestMapping(value = "/{date}/date_created", method = RequestMethod.GET)
-    public Resources<Resource<DiscountVoucher>> getVoucherByDateCreated(@PathVariable Timestamp date, HttpServletRequest request){
+    public Resources<Resource<DiscountVoucher>> getVoucherByDateCreated(@PathVariable("date") String date, HttpServletRequest request){
         LogHelper.logRequest(request, log);
         requestModel = new DiscountVoucher();
         Auth.setCredentials(request, requestModel);
-        requestModel.setDateCreated(date);
+        requestModel.setDateCreated(LocalDate.parse(date));
         List<Resource<DiscountVoucher>> vouchers = service.getVoucherByDateCreated(requestModel)
                 .stream()
                 .map(assembler::toResource)
@@ -238,7 +240,7 @@ DiscountVoucherController {
     }
 
     @RequestMapping(value = "/{expiryDate}/expiry_date", method = RequestMethod.GET)
-    public Resources<Resource<DiscountVoucher>> getVoucherByExpiryDate(@PathVariable Timestamp expiryDate, HttpServletRequest request){
+    public Resources<Resource<DiscountVoucher>> getVoucherByExpiryDate(@PathVariable("expiryDate") String expiryDate, HttpServletRequest request){
         LogHelper.logRequest(request, log);
         requestModel = new DiscountVoucher();
         Auth.setCredentials(request, requestModel);
@@ -289,8 +291,12 @@ DiscountVoucherController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "/distribute", method = RequestMethod.POST)
-    public Response distribute(@RequestBody DiscountVoucher voucher, HttpServletRequest request){
+    @RequestMapping(value = "{code}/distribute", method = RequestMethod.POST)
+    public Response distribute(@PathVariable("code") String code, HttpServletRequest request){
+        requestModel = new DiscountVoucher();
+        requestModel.setCode(code);
+        Auth.setCredentials(request, requestModel);
+        DiscountVoucher voucher = service.getVoucherByCode(requestModel);
         distributionService.sendStandaloneVoucher(voucher);
         return new Response(HttpStatus.OK, "Voucher Sent Successfully", null );
     }

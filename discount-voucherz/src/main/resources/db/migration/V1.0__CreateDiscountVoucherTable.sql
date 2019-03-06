@@ -3,7 +3,7 @@ CREATE TABLE DiscountVoucher(
 	[rowguid] [uniqueidentifier] DEFAULT NEWID() NOT NULL,
 	[code] [nvarchar](16) NOT NULL  UNIQUE ,
   [type] [smallint] NOT NULL,
-  [value] decimal(18, 2) NULL,
+  [value] decimal(18, 2) NOT NULL,
   [dateCreated] date DEFAULT GETDATE() NOT NULL,
   [expiryDate] date NULL,
   [isActive] bit DEFAULT 1 NOT NULL,

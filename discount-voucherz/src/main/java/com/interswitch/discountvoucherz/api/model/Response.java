@@ -17,17 +17,17 @@ public class Response{
 
     private final Integer status;
 
-    @JsonProperty("Response Phrase")
-    private final HttpStatus responsePhrase;
+    @JsonProperty("Http Status Phrase")
+    private final HttpStatus httpStatus;
 
     private final String message;
 
     private final List<Error> errors;
 
-    public Response(HttpStatus responsePhrase, String message, List<Error> errors) {
+    public Response(HttpStatus httpStatus, String message, List<Error> errors) {
         this.timestamp = timestamp();
-        this.status = responsePhrase.value();
-        this.responsePhrase = responsePhrase;
+        this.status = httpStatus.value();
+        this.httpStatus = httpStatus;
         this.message = message;
         this.errors = errors;
     }

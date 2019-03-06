@@ -5,34 +5,16 @@ import java.io.Serializable;
 public class VoucherMail implements Serializable {
     private String emailAddress;
     private String voucherCode;
-    private int voucherType;
+    private String voucherType;
     private String merchantName;
     private String voucherDescription;
 
-    private String voucherTypeName;
-
-    public void setVoucherTypeName(){
-        switch (voucherType){
-            case 1:
-                voucherTypeName = "Gift";
-                break;
-            case 2:
-                voucherTypeName = "Discount";
-                break;
-            case 3:
-                voucherTypeName = "Value";
-                break;
-            default:
-                voucherTypeName = "";
-        }
-    }
-
-    public String getVoucherTypeName(){
-        return voucherTypeName;
-    }
-
     public String getEmailAddress() {
         return emailAddress;
+    }
+
+    public void setVoucherType(String voucherType) {
+        this.voucherType = voucherType;
     }
 
     public void setEmailAddress(String emailAddress) {
@@ -47,12 +29,8 @@ public class VoucherMail implements Serializable {
         this.voucherCode = voucherCode;
     }
 
-    public int getVoucherType() {
+    public String getVoucherType() {
         return voucherType;
-    }
-
-    public void setVoucherType(int voucherType) {
-        this.voucherType = voucherType;
     }
 
     public String getMerchantName() {
@@ -75,13 +53,12 @@ public class VoucherMail implements Serializable {
     @Override
     public String toString() {
         String mailMessage = String.format(
-                "You have been awarded a %s voucher:\n"+
+                "You have been awarded a %s Voucher:\n"+
                         "Code: %s\n" +
-                "from:%s" +
                         "Description: %s"
 
                 ,
-                voucherTypeName, voucherCode, merchantName, voucherDescription
+                voucherType, voucherCode, voucherDescription
         );
 
         return mailMessage;

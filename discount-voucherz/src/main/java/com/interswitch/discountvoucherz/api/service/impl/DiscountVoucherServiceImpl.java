@@ -40,10 +40,12 @@ public class DiscountVoucherServiceImpl<T> implements DiscountVoucherService<T> 
         SQLServerDataTable vouchersTvp = null;
         CodeConfig codeConfig = bulkVouchers.getCodeConfig();
         DiscountVoucher model = bulkVouchers.getDiscountVoucher();
+        log.info(model.toString());
         try {
             vouchersTvp = getTvpWithMetadata();
             addTableRows(model, vouchersTvp, codeConfig);
         } catch (SQLServerException e) {
+            e.printStackTrace();
             throw new RequestException(HttpStatus.INTERNAL_SERVER_ERROR, e.getClass().getName()+" : "+e.getMessage());
         }
 
@@ -58,7 +60,7 @@ public class DiscountVoucherServiceImpl<T> implements DiscountVoucherService<T> 
         vouchers.setTvpName("[dbo].[voucher_table_param]");
         vouchers.addColumnMetadata("code", Types.NVARCHAR);
         vouchers.addColumnMetadata("type", Types.SMALLINT);
-        vouchers.addColumnMetadata("value", Types.DECIMAL);
+        vouchers.addColumnMetadata("value", Types.DOUBLE);
         vouchers.addColumnMetadata("expiryDate", Types.DATE);
         vouchers.addColumnMetadata("campaignId", Types.NVARCHAR);
         vouchers.addColumnMetadata("customerId", Types.NVARCHAR);
@@ -77,7 +79,7 @@ public class DiscountVoucherServiceImpl<T> implements DiscountVoucherService<T> 
             vouchers.addRow(VoucherCodeGenerator.generate(config),
                     model.getType(),
                     model.getValue(),
-                    model.getExpiryDate(),
+                    model.getExpiryDate().toString(),
                     model.getCampaignId(),
                     model.getCustomerId(),
                     model.getMerchantId(),
@@ -90,8 +92,8 @@ public class DiscountVoucherServiceImpl<T> implements DiscountVoucherService<T> 
     }
 
     @Override
-    public Response update(T model) {
-        if(dao.update(model)){
+    public Response updateValue(T model) {
+        if(dao.updateVoucherValue(model)){
             return new Response(HttpStatus.OK, "Update Successful!", null);
         }
         throw  new RequestException(HttpStatus.BAD_REQUEST, "Update Request Failed!");
@@ -108,11 +110,6 @@ public class DiscountVoucherServiceImpl<T> implements DiscountVoucherService<T> 
     @Override
     public T redeem(T model) {
         return dao.redeem(model);
-    }
-
-    @Override
-    public T addBalance(T model) {
-        return dao.addBalance(model);
     }
 
     @Override
@@ -134,9 +131,9 @@ public class DiscountVoucherServiceImpl<T> implements DiscountVoucherService<T> 
     @Override
     public Response unDelete(T model) {
         if(dao.unDelete(model)){
-            return new Response(HttpStatus.OK, "Deleted Successfully!", null);
+            return new Response(HttpStatus.OK, "UnDeleted Successfully!", null);
         }
-        throw  new RequestException(HttpStatus.BAD_REQUEST, "Delete Request Failed!");
+        throw  new RequestException(HttpStatus.BAD_REQUEST, "UnDelete Request Failed!");
     }
 
 

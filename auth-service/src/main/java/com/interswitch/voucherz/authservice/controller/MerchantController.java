@@ -79,7 +79,7 @@ public class MerchantController {
                 "Merchant Created");
 
         response = new Response(HttpStatus.CREATED, HttpStatus.CREATED.value(),"User created",null);
-        LogHelper.logResponse(logger, HttpStatus.CONFLICT, response);
+        LogHelper.logResponse(logger, response.getStatus(), response);
         return response;
 
     }

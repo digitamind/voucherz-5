@@ -3,6 +3,7 @@ package com.interswitch.discountvoucherz.api.dao.impl;
 import com.interswitch.discountvoucherz.api.dao.AbstractBaseDao;
 import com.interswitch.discountvoucherz.api.dao.DiscountVoucherDao;
 import com.interswitch.discountvoucherz.api.model.request.DiscountVoucher;
+import com.interswitch.discountvoucherz.api.model.response.VoucherEntitiy;
 import com.microsoft.sqlserver.jdbc.SQLServerDataTable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +35,9 @@ public class DiscountVoucherDaoImpl<T> extends AbstractBaseDao<T> implements Dis
             unDelete,
             disable,
             enable,
-            addBalance,
             redeem,
-            getVoucherByProduct;
+            getVoucherByProduct,
+            updateValue;
 
 
     @Autowired
@@ -45,7 +46,8 @@ public class DiscountVoucherDaoImpl<T> extends AbstractBaseDao<T> implements Dis
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         createSingle = new SimpleJdbcCall(jdbcTemplate).withProcedureName("uspCreateVoucher").withReturnValue();
         createBulk = new SimpleJdbcCall(jdbcTemplate).withProcedureName("uspCreateVouchers").withReturnValue();
-        update = new SimpleJdbcCall(jdbcTemplate).withProcedureName("uspUpdateVoucherValue").withReturnValue();
+        update = new SimpleJdbcCall(jdbcTemplate).withProcedureName("uspUpdateVoucher").withReturnValue();
+        updateValue = new SimpleJdbcCall(jdbcTemplate).withProcedureName("uspUpdateVoucherValue").withReturnValue();
         getVoucherByCode = new SimpleJdbcCall(jdbcTemplate).withProcedureName("uspGetVoucherByCode")
                 .returningResultSet(SINGLE_RESULT, new BeanPropertyRowMapper<>(DiscountVoucher.class));
         getVoucherByCampaign = new SimpleJdbcCall(jdbcTemplate).withProcedureName("uspGetVoucherByCampaign")
@@ -70,8 +72,6 @@ public class DiscountVoucherDaoImpl<T> extends AbstractBaseDao<T> implements Dis
                 .withReturnValue();
         enable = new SimpleJdbcCall(jdbcTemplate).withProcedureName("uspEnableVoucher")
                 .withReturnValue();
-        addBalance = new SimpleJdbcCall(jdbcTemplate).withProcedureName("uspAddVoucherBalance")
-                .returningResultSet(SINGLE_RESULT, new BeanPropertyRowMapper<>(DiscountVoucher.class));
         redeem = new SimpleJdbcCall(jdbcTemplate).withProcedureName("uspRedeemVoucher")
                 .returningResultSet(SINGLE_RESULT, new BeanPropertyRowMapper<>(DiscountVoucher.class));
 
@@ -153,9 +153,9 @@ public class DiscountVoucherDaoImpl<T> extends AbstractBaseDao<T> implements Dis
     }
 
     @Override
-    public T addBalance(T model) {
+    public Boolean updateVoucherValue(T model) {
         SqlParameterSource in = new BeanPropertySqlParameterSource(model);
-        return withSingleResultSet(in, addBalance);
+        return withReturnValue(in, updateValue);
     }
 
     @Override

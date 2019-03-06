@@ -9,7 +9,6 @@ ALTER PROCEDURE [dbo].[uspUpdateVoucher]
 AS
 BEGIN
   BEGIN TRY
-    BEGIN TRANSACTION
       UPDATE [dbo].[DiscountVoucher]
       SET [value] = @value
       WHERE userId = @userId
@@ -22,7 +21,6 @@ BEGIN
         RETURN;
       ELSE
         RAISERROR('DiscountVoucher Updates Failed.', 16, 1);
-    COMMIT
   END TRY
   BEGIN CATCH
     IF @@TRANCOUNT > 0

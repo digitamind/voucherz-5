@@ -1,7 +1,8 @@
 package com.interswitch.voucherz.notificationservice.config;
 
+import com.interswitch.voucherz.notificationservice.queue.consumer.BulkVoucherMailDistributionSubscriber;
+import com.interswitch.voucherz.notificationservice.queue.consumer.SingleVoucherMailDistributionSubscriber;
 import com.interswitch.voucherz.notificationservice.queue.consumer.VerificationMailSubscriber;
-import com.interswitch.voucherz.notificationservice.queue.consumer.VoucherMailDistributionSubscriber;
 import com.interswitch.voucherz.notificationservice.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -34,28 +35,43 @@ public class RedisConfig {
     }
 
     @Bean
-    MessageListenerAdapter messageListener() {
+    MessageListenerAdapter verificationMailListener() {
         return new MessageListenerAdapter(new VerificationMailSubscriber(emailService));
     }
 
+    @Bean
+    MessageListenerAdapter singleDiscountVoucherMailListener() {
+        return new MessageListenerAdapter(new SingleVoucherMailDistributionSubscriber(emailService));
+    }
+
+    @Bean
+    MessageListenerAdapter bulkDiscountVoucherMailListener() {
+        return new MessageListenerAdapter(new BulkVoucherMailDistributionSubscriber(emailService));
+    }
 
 
     @Bean
     RedisMessageListenerContainer redisContainer() {
         final RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
-        container.addMessageListener(messageListener(), verificationMailtopic());
-
-        container.addMessageListener(new MessageListenerAdapter
-                        (new VoucherMailDistributionSubscriber(emailService)),
-                new ChannelTopic("pubsub:voucher-distribution-mail"));
-
+        container.addMessageListener(verificationMailListener(), verificationMailTopic());
+        container.addMessageListener(singleDiscountVoucherMailListener(), singleDiscountVoucherMailTopic());
+        container.addMessageListener(bulkDiscountVoucherMailListener(), bulkDiscountVoucherMailTopic());
         return container;
     }
 
     @Bean
-    ChannelTopic verificationMailtopic() {
+    ChannelTopic verificationMailTopic() {
         return new ChannelTopic("pubsub:verification-mail");
     }
 
+    @Bean
+    ChannelTopic singleDiscountVoucherMailTopic() {
+        return new ChannelTopic("pubsub:distribute-discount-voucher");
+    }
+
+    @Bean
+    ChannelTopic bulkDiscountVoucherMailTopic() {
+        return new ChannelTopic("pubsub:distribute-discount-voucher-bulk");
+    }
 }

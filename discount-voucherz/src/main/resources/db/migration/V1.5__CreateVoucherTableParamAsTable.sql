@@ -1,7 +1,7 @@
 CREATE TYPE dbo.voucher_table_param AS TABLE(
   [code] [nvarchar](16) NOT NULL,
   [type] [smallint] NOT NULL,
-  [value] [int] NOT NULL,
+  [value] decimal(18, 2) NOT NULL,
   [expiryDate] [datetime] NULL,
   [campaignId] [nvarchar] (62) DEFAULT 0 NOT NULL,
   [customerId] [nvarchar] (62) DEFAULT 0 NOT NULL,

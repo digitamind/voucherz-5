@@ -27,7 +27,7 @@ public interface DiscountVoucherService<T>{
 
     T validateVoucher(T model);
 
-    Response update(T model);
+    Response updateValue(T model);
 
     Page<T> findAll(int pageNumber, int pageSize);
 
@@ -38,8 +38,6 @@ public interface DiscountVoucherService<T>{
     List<T> getVoucherByProduct(T model);
 
     T redeem(T model);
-
-    T addBalance(T model);
 
     Response enable(T model);
 

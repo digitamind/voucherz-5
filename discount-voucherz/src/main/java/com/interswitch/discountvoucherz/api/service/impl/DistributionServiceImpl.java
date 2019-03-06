@@ -22,7 +22,7 @@ public class DistributionServiceImpl implements DistributionService {
     @Async
     @Override
     public void sendStandaloneVoucher(DiscountVoucher voucher) {
-        VoucherMail mail = buildMail(voucher);
+        VoucherMail mail = composeMail(voucher);
         try{
             publisher.publish(mail);
         }
@@ -38,7 +38,7 @@ public class DistributionServiceImpl implements DistributionService {
         List<VoucherMail> mailList = new ArrayList<>();
         VoucherMail mail;
         for(DiscountVoucher voucher: vouchers){
-            mail = buildMail(voucher);
+            mail = composeMail(voucher);
             mailList.add(mail);
         }
         try{
@@ -49,12 +49,12 @@ public class DistributionServiceImpl implements DistributionService {
         }
     }
 
-    public VoucherMail buildMail(DiscountVoucher voucher){
+    public VoucherMail composeMail(DiscountVoucher voucher){
         VoucherMail mail = new VoucherMail();
         mail.setVoucherCode(voucher.getCode());
-        mail.setEmailAddress(voucher.getCustomerId());
+        mail.setEmailAddress(voucher.getUserId());//TODO: change email address to customer email
         mail.setVoucherDescription("USE THIS PROMO CODE TO SHOP ON OUR WEBSITE: ");
-        mail.setVoucherType(1);
+        mail.setVoucherType("Discount");
         return mail;
     }
 }

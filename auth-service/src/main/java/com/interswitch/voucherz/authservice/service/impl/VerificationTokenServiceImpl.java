@@ -39,7 +39,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
 
         if (verificationMailType == VerificationMailType.REGISTRATION_VERFICATION_MAIL){
             subject = "Registration Verification - Voucherz";
-            confirmationUrl = "http://localhost:8080/v1/merchant-management/merchants" +
+            confirmationUrl = "http://localhost:8180/v1/merchant-management/merchants" +
                     "/confirmRegistration?token="+token;
         }
 

@@ -13,6 +13,9 @@ public class Response  {
     public int getCode() {
         return code;
     }
+    public HttpStatus getStatus(){
+        return status;
+    }
 
     public String getCodeDescription() {
         return codeDescription;

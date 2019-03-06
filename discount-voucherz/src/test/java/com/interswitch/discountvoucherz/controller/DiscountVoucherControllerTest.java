@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 @RunWith(SpringRunner.class)
 @EnableConfigurationProperties
@@ -51,7 +52,7 @@ public class DiscountVoucherControllerTest {
         voucher.setUserId("ola@gmail.com");
         voucher.setCode("CtduYrcdW");
         voucher.setType(DiscountType.UNIT);
-        voucher.setValue(20);
+        voucher.setValue(20.0);
 
 //        model.setCodeConfig(config);
 //        model.setDiscountVoucher(voucher);
